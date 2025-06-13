@@ -3,8 +3,26 @@
   connection: local
   tasks:
     - name: Create Kubernetes Namespace
-      k8s: { state: present, template: 'templates/01-namespace.yml.j2' }
-    - name: Deploy Backend
-      k8s: { state: present, template: 'templates/02-backend.yml.j2' }
-    - name: Deploy Frontend
-      k8s: { state: present, template: 'templates/03-frontend.yml.j2' }
+      k8s:
+        state: present
+        template: 'templates/01-namespace.yml.j2'
+
+    - name: Create Application ConfigMap
+      k8s:
+        state: present
+        template: 'templates/02-configmap.yml.j2'
+        
+    - name: Create Application Secret
+      k8s:
+        state: present
+        template: 'templates/03-secret.yml.j2'
+
+    - name: Deploy Grocery App Deployment
+      k8s:
+        state: present
+        template: 'templates/04-deployment.yml.j2'
+        
+    - name: Deploy Grocery App Service
+      k8s:
+        state: present
+        template: 'templates/05-service.yml.j2'
