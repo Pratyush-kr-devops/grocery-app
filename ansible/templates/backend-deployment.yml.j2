@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  namespace: "{{ k8s_namespace }}"
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: grocery-backend } }
+  template:
+    metadata: { labels: { app: grocery-backend } }
+    spec:
+      containers:
+      - name: backend-container
+        image: "{{ DOCKER_REGISTRY }}/{{ BACKEND_IMAGE_NAME }}:{{ image_tag }}"
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: "{{ k8s_namespace }}"
+spec:
+  selector: { app: grocery-backend }
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
