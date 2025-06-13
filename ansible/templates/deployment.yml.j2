@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: online-grocery-deployment
+  namespace: "{{ k8s_namespace }}"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: online-grocery
+  template:
+    metadata:
+      labels:
+        app: online-grocery
+    spec:
+      containers:
+      - name: grocery-app-container
+        image: "{{ DOCKER_REGISTRY }}/{{ DOCKER_IMAGE_NAME }}:{{ image_tag }}"
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: grocery-app-config
+        - secretRef:
+            name: grocery-app-secret
