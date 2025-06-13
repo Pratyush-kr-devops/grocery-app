@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Create Kubernetes Namespace
+      k8s: { state: present, template: 'templates/01-namespace.yml.j2' }
+    - name: Deploy Backend
+      k8s: { state: present, template: 'templates/02-backend.yml.j2' }
+    - name: Deploy Frontend
+      k8s: { state: present, template: 'templates/03-frontend.yml.j2' }
