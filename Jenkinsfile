@@ -2,17 +2,17 @@ pipeline {
     agent any
 
     environment {
-        SONAR_HOST_URL = "http://your-sonarqube-server:9000"
+        SONAR_HOST_URL = "http://your-sonarqube-server:9000"  // Update this with your real URL
         SONAR_LOGIN_TOKEN = credentials('SONAR_TOKEN')
-        DOCKER_REGISTRY = "ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com" // Replace ACCOUNT_ID
+        DOCKER_REGISTRY = "216989113468.dkr.ecr.us-east-1.amazonaws.com"
         DOCKER_IMAGE_NAME = "online-grocery-app"
-        APP_DB_PASSWORD = credentials('PROD_DB_PASSWORD') // Example of a secret
+        APP_DB_PASSWORD = credentials('PROD_DB_PASSWORD')
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/your-repo/online-grocery.git'
+                git branch: 'main', url: 'https://github.com/Pratyush-kr-devops/grocery-app.git'
             }
         }
 
@@ -42,7 +42,6 @@ pipeline {
             steps {
                 script {
                     def imageTag = "${env.BUILD_NUMBER}"
-                    // Login to AWS ECR and push the image
                     sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}"
                     docker.build("${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}:${imageTag}")
                     docker.push("${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}:${imageTag}")
