@@ -36,7 +36,7 @@ resource "aws_subnet" "public" {
 // --- EKS Cluster ---
 resource "aws_eks_cluster" "main" {
   name     = "devops-cluster"
-  role_arn = "arn:aws:iam::ACCOUNT_ID:role/EKS_CLUSTER_ROLE" // IMPORTANT: Replace with your EKS Cluster IAM Role ARN
+  role_arn = "arn:aws:iam::216989113468:role/eksClusterRole" // IMPORTANT: Replace with your EKS Cluster IAM Role ARN
 
   vpc_config {
     subnet_ids              = [for s in aws_subnet.public : s.id]
@@ -50,7 +50,7 @@ resource "aws_eks_cluster" "main" {
 resource "aws_eks_node_group" "main" {
   cluster_name    = aws_eks_cluster.main.name
   node_group_name = "devops-node-group"
-  node_role_arn   = "arn:aws:iam::ACCOUNT_ID:role/EKS_NODE_ROLE" // IMPORTANT: Replace with your EKS Node Group IAM Role ARN
+  node_role_arn   = "arn:aws:iam::216989113468:role/eksNodegroupRole" // IMPORTANT: Replace with your EKS Node Group IAM Role ARN
   subnet_ids      = [for s in aws_subnet.public : s.id]
   instance_types  = ["t3.medium"]
 
